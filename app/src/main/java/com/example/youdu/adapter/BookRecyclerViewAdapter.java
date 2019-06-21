@@ -10,13 +10,15 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.youdu.BookshelfFragment.OnItemClickListener;
+import com.example.youdu.MainActivity;
 import com.example.youdu.R;
-import com.example.youdu.bean.Book;
+import com.example.youdu.bean.BookInfo;
+import com.example.youdu.bean.db.Book;
 
 import java.util.List;
 
 /**
- * {@link RecyclerView.Adapter} that can display a {@link Book} and makes a call to the
+ * {@link RecyclerView.Adapter} that can display a {@link BookInfo} and makes a call to the
  * specified {@link OnItemClickListener}.
  * TODO: Replace the implementation with code for your data type.
  */
@@ -42,8 +44,8 @@ public class BookRecyclerViewAdapter extends RecyclerView.Adapter<BookRecyclerVi
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        Glide.with(mContext).load(mValues.get(position).coverUrl).into(holder.mCover);
-        holder.mTitleText.setText(mValues.get(position).tile);
+        Glide.with(mContext).load(MainActivity.URL + mValues.get(position).getCoverPath()).into(holder.mCover);
+        holder.mTitleText.setText(mValues.get(position).getTitle());
         holder.mAuthorText.setVisibility(View.GONE);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {

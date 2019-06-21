@@ -1,9 +1,10 @@
 package com.example.youdu.util;
 
 import com.example.youdu.MainActivity;
-import com.example.youdu.bean.User;
+import com.example.youdu.bean.UserInfo;
 import com.example.youdu.net.LoginApi;
 import com.example.youdu.net.RegisterApi;
+import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -38,7 +39,7 @@ public class AccountManager {
     public static void register(String userName, String password, final MyCallback callback){
 
         retrofit.create(RegisterApi.class)
-                .request(userName, password)
+                .request(userName, Encryption.md5(password))
                 .enqueue(new Callback<Boolean>() {
                     @Override
                     public void onResponse(Call<Boolean> call, Response<Boolean> response) {
@@ -56,9 +57,10 @@ public class AccountManager {
                 });
     }
 
-    public static void login(String userName, String password, final MyCallback<User> callback){
+    public static void login(String userName, String password, final MyCallback<UserInfo> callback) {
+        final String passwordMd5 = Encryption.md5(password);
         retrofit.create(LoginApi.class)
-                .request(userName, password)
+                .request(userName, passwordMd5)
                 .enqueue(new Callback<JSONObject>() {
                     @Override
                     public void onResponse(Call<JSONObject> call, Response<JSONObject> response) {
@@ -70,7 +72,8 @@ public class AccountManager {
                             switch (code){
                                 case 0:
                                     result = LOGIN_SUCCESS;
-                                    User user = JsonHandler.handleUserResponse(obj);
+                                    UserInfo user = new Gson().fromJson(obj.getJSONObject("user").toString(), UserInfo.class);
+                                    user.setPasswordMd5(passwordMd5);
                                     callback.onSuccess(user);
                                     return;
                                 case 1:

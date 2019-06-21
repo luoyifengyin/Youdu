@@ -10,5 +10,5 @@ import retrofit2.http.POST;
 public interface LoginApi {
     @FormUrlEncoded
     @POST("login.php")
-    Call<JSONObject> request(@Field("username") String username, @Field("password") String password);
+    Call<JSONObject> request(@Field("username") String username, @Field("passwordMd5") String password);
 }

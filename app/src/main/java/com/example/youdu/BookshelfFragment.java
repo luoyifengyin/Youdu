@@ -2,7 +2,6 @@ package com.example.youdu;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,13 +13,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.youdu.adapter.BookRecyclerViewAdapter;
-import com.example.youdu.bean.Book;
-import com.example.youdu.bean.User;
+import com.example.youdu.bean.BookInfo;
+import com.example.youdu.bean.UserInfo;
+import com.example.youdu.bean.db.Book;
 import com.example.youdu.net.BookshelfApi;
+import com.example.youdu.util.LocalDataManager;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -37,18 +37,14 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class BookshelfFragment extends Fragment {
 
     public static final String ARG_COLUMN_COUNT = "column-count";
-    public static final String ARG_USER = "user";
-    //private static final String BOOKSHELF = "bookshelf";
-    private static final String BOOK_TITLE = "book_title";
-    private static final String BOOK_AUTHOR = "book_author";
-    private static final String BOOK_COVER_URL = "book_cover_url";
     private int mColumnCount = 3;
     private OnItemClickListener mListener;
     private BooksActivity mActivity;
     private Retrofit retrofit;
 
-    private User user;
+    private UserInfo user;
     private List<Book> mBookList = new ArrayList<>();
+    private BookRecyclerViewAdapter adapter;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -63,11 +59,10 @@ public class BookshelfFragment extends Fragment {
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
-    public static BookshelfFragment newInstance(int columnCount, User user) {
+    public static BookshelfFragment newInstance(int columnCount, UserInfo user) {
         BookshelfFragment fragment = new BookshelfFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_COLUMN_COUNT, columnCount);
-        args.putSerializable(ARG_USER, user);
         fragment.setArguments(args);
         return fragment;
     }
@@ -75,10 +70,9 @@ public class BookshelfFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        user = LocalDataManager.getInstance(getContext()).getUser();
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT, mColumnCount);
-            user = (User) getArguments().getSerializable("user");
         }
     }
 
@@ -96,7 +90,8 @@ public class BookshelfFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new BookRecyclerViewAdapter(context, mBookList, mListener));
+            adapter = new BookRecyclerViewAdapter(context, mBookList, mListener);
+            recyclerView.setAdapter(adapter);
         }
         return view;
     }
@@ -104,28 +99,25 @@ public class BookshelfFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        user = mActivity.getUser();
-        SharedPreferences prefs = mActivity.getSharedPreferences(user.name, 0);
-        Set<String> set = prefs.getStringSet(BOOK_TITLE, null);
-        if (set != null){
-
-        }
-        else {
-            requestBookshelf();
-        }
+        mBookList = LocalDataManager.getInstance(getContext()).getBookCollection();
+        adapter.notifyDataSetChanged();
+        requestBookshelf();
     }
 
     private void requestBookshelf(){
         retrofit.create(BookshelfApi.class)
-                .request(user.uid)
-                .enqueue(new Callback<List<Book>>() {
+                .request(user.getUid())
+                .enqueue(new Callback<List<BookInfo>>() {
                     @Override
-                    public void onResponse(Call<List<Book>> call, Response<List<Book>> response) {
-                        mBookList = response.body();
+                    public void onResponse(Call<List<BookInfo>> call, Response<List<BookInfo>> response) {
+                        List<BookInfo> list = response.body();
+                        LocalDataManager.getInstance(getContext()).saveBookCollection(list);
+                        mBookList = LocalDataManager.getInstance(getContext()).getBookCollection();
+                        adapter.notifyDataSetChanged();
                     }
 
                     @Override
-                    public void onFailure(Call<List<Book>> call, Throwable t) {
+                    public void onFailure(Call<List<BookInfo>> call, Throwable t) {
                         t.printStackTrace();
                     }
                 });

@@ -1,18 +1,23 @@
 package com.example.youdu.util;
 
-import com.example.youdu.bean.User;
-import com.google.gson.Gson;
-
-import org.json.JSONException;
-import org.json.JSONObject;
+import android.content.Context;
 
 public class JsonHandler {
-    public static User handleUserResponse(JSONObject object){
-        try {
-            return new Gson().fromJson(object.getJSONObject("user").toString(), User.class);
-        } catch (JSONException e) {
-            e.printStackTrace();
+    private static JsonHandler jsonHandler;
+    private Context context;
+
+    private JsonHandler(Context context) {
+        this.context = context.getApplicationContext();
+    }
+
+    public static JsonHandler with(Context context) {
+        if (jsonHandler == null) {
+            synchronized (JsonHandler.class) {
+                if (jsonHandler == null) {
+                    jsonHandler = new JsonHandler(context);
+                }
+            }
         }
-        return null;
+        return jsonHandler;
     }
 }
