@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="分类"
+            android:textStyle="bold"
+            android:textSize="80px"
+            android:layout_centerInParent="true"/>
+
+        <Button
+            android:id=""
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/ic_back"/>
+
+    </RelativeLayout>
+
+      <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="#5676777A">
+
+        <LinearLayout
+            android:id=""
+            android:layout_width="300dp"
+            android:layout_height="40dp"
+            android:orientation="horizontal"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="25dp"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:background="#ffffff">
+
+            <ImageView
+                android:layout_width="35dp"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_search"
+                android:background="#5676777A"
+                tools:ignore="ContentDescription"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:imeOptions="actionUnspecified"
+                android:inputType="textPassword"
+                android:maxLines="1"
+                android:singleLine="true" />
+        </LinearLayout>
+
+          <Button
+              android:id=""
+              android:layout_width="80dp"
+              android:layout_height="match_parent"
+              android:layout_alignParentRight="true"
+              android:layout_marginLeft="@dimen/activity_horizontal_margin"
+              android:layout_marginTop="25dp"
+              android:layout_marginRight="@dimen/activity_horizontal_margin"
+              android:layout_marginBottom="@dimen/activity_vertical_margin"
+              android:text="查找"
+              android:textColor="#B90000FF"
+              android:textStyle="bold"
+              />
+
+      </RelativeLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:columnCount="4"
+            android:orientation="horizontal"
+            android:layout_gravity="center_horizontal"
+            >
+
+            <Button
+                android:id=""
+                android:layout_columnSpan="1"
+                android:layout_rowSpan="1"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:text="玄幻"/>
+            <Button
+                android:id=""
+                android:layout_columnSpan="1"
+                android:layout_rowSpan="1"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:text="武侠"/>
+            <Button
+                android:id=""
+                android:layout_columnSpan="1"
+                android:layout_rowSpan="1"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:text="都市"/>
+            <Button
+                android:id=""
+                android:layout_columnSpan="1"
+                android:layout_rowSpan="1"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:text="仙侠"/>
+            <Button
+                android:id=""
+                android:layout_columnSpan="1"
+                android:layout_rowSpan="1"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:text="历史"/>
+            <Button
+                android:id=""
+                android:layout_columnSpan="1"
+                android:layout_rowSpan="1"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:text="军事"/>
+            <Button
+                android:id=""
+                android:layout_columnSpan="1"
+                android:layout_rowSpan="1"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:text="灵异"/>
+            <Button
+                android:id=""
+                android:layout_columnSpan="1"
+                android:layout_rowSpan="1"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:text="职场"/>
+            <Button
+                android:id=""
+                android:layout_columnSpan="1"
+                android:layout_rowSpan="1"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:text="同人"/>
+            <Button
+                android:id=""
+                android:layout_columnSpan="1"
+                android:layout_rowSpan="1"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:text="游戏"/>
+            <Button
+                android:id=""
+                android:layout_columnSpan="1"
+                android:layout_rowSpan="1"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:text="科幻"/>
+            <Button
+                android:id=""
+                android:layout_columnSpan="1"
+                android:layout_rowSpan="1"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:text="青春"/>
+
+
+        </GridLayout>
+
+    </ScrollView>
+
+
+</LinearLayout>
