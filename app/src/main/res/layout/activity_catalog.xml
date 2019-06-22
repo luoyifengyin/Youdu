@@ -1,9 +1,108 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".CatalogActivity">
 
-</android.support.constraint.ConstraintLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:orientation="horizontal"
+        android:background="@drawable/catalog1_bg">
+
+
+        <ImageView
+            android:layout_width="160dp"
+            android:layout_height="match_parent" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id=""
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:textStyle="bold"
+                android:textSize="25sp"
+                tools:text="书名"/>
+            <TextView
+                android:id=""
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:textStyle="bold"
+                android:textSize="25sp"
+                tools:text="类型"/>
+            <TextView
+                android:id=""
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:textStyle="bold"
+                android:textSize="25sp"
+                tools:text="订阅量"/>
+            <TextView
+                android:id=""
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:textStyle="bold"
+                android:textSize="25sp"
+                tools:text="最新更新时间"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id=""
+
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/activity_horizontal_margin"
+                    android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                    android:background="#BA33337A"
+                    android:text="取消订阅"
+                    android:textStyle="bold" />
+                <Button
+                    android:id=""
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/activity_horizontal_margin"
+                    android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                    android:background="#BA33337A"
+                    android:text="继续阅读"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="80dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textStyle="bold"
+            android:textSize="25sp"
+            tools:text="  简介："/>
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_weight="1">
+
+    </android.support.v7.widget.RecyclerView>
+
+</LinearLayout>
