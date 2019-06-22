@@ -7,11 +7,12 @@ import android.view.View;
 import android.widget.TabHost;
 import android.widget.TextView;
 
-import com.example.youdu.bean.User;
+import com.example.youdu.bean.UserInfo;
+import com.example.youdu.util.LocalDataManager;
 
 public class BooksActivity extends AppCompatActivity {
 
-    private User user;
+    private UserInfo user;
 
     private FragmentTabHost mTabHost;
 
@@ -19,27 +20,21 @@ public class BooksActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_books);
-        user = (User) getIntent().getSerializableExtra("user");
+        user = LocalDataManager.getInstance(this).getUser();
         mTabHost = findViewById(android.R.id.tabhost);
         mTabHost.setup(this, getSupportFragmentManager(), android.R.id.tabcontent);
-        Bundle bundle = new Bundle();
-        bundle.putSerializable(BookshelfFragment.ARG_USER, user);
-        mTabHost.addTab(createTabSpec("bookshelf", "书架"), BookshelfFragment.class, bundle);
+        mTabHost.addTab(createTabSpec("bookshelf", "书架"), BookshelfFragment.class, null);
 
-    }
-
-    public User getUser(){
-        return user;
     }
 
     private TabHost.TabSpec createTabSpec(String tag, String name){
         return mTabHost.newTabSpec(tag).setIndicator(createTabView(name));
     }
 
-    private View createTabView(String tag){
+    private View createTabView(String name) {
         View view = getLayoutInflater().inflate(R.layout.view_tab, mTabHost.getTabWidget());
         TextView tv = view.findViewById(R.id.tag);
-        tv.setText(tag);
+        tv.setText(name);
         return view;
     }
 }

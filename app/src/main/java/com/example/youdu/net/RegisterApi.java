@@ -10,5 +10,5 @@ import retrofit2.http.POST;
 public interface RegisterApi {
     @FormUrlEncoded
     @POST("register.php")
-    Call<Boolean> request(@Field("username") String username, @Field("password") String password);
+    Call<Boolean> request(@Field("username") String username, @Field("passwordMd5") String password);
 }

@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#529C27B0"
+    android:orientation="vertical"
     tools:context=".BooksActivity">
 
     <android.support.v4.app.FragmentTabHost

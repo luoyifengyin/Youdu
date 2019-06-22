@@ -9,9 +9,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.youdu.bean.User;
+import com.example.youdu.bean.UserInfo;
 import com.example.youdu.util.AccountManager;
 import com.example.youdu.util.MyCallback;
+import com.example.youdu.util.LocalDataManager;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -39,11 +40,11 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String userName = accountText.getText().toString();
                 String password = passwordText.getText().toString();
-                AccountManager.login(userName, password, new MyCallback<User>() {
+                AccountManager.login(userName, password, new MyCallback<UserInfo>() {
                     @Override
-                    public void onSuccess(User user) {
+                    public void onSuccess(UserInfo user) {
+                        LocalDataManager.getInstance(MainActivity.this).saveUser(user);
                         Intent intent = new Intent(MainActivity.this, BooksActivity.class);
-                        intent.putExtra("user", user);
                         startActivity(intent);
                         finish();
                     }
