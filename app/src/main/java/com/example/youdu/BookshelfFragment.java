@@ -1,7 +1,6 @@
 package com.example.youdu;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -28,21 +27,14 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-/**
- * A fragment representing a list of Items.
- * <p/>
- * Activities containing this fragment MUST implement the {@link OnItemClickListener}
- * interface.
- */
 public class BookshelfFragment extends Fragment {
-
     public static final String ARG_COLUMN_COUNT = "column-count";
     private int mColumnCount = 3;
-    private OnItemClickListener mListener;
-    private BooksActivity mActivity;
+    private BookRecyclerViewAdapter.OnItemClickListener mListener;
+    private IndexActivity mActivity;
     private Retrofit retrofit;
 
-    private UserInfo user;
+    private UserInfo mUserInfo;
     private List<Book> mBookList = new ArrayList<>();
     private BookRecyclerViewAdapter adapter;
 
@@ -59,7 +51,7 @@ public class BookshelfFragment extends Fragment {
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
-    public static BookshelfFragment newInstance(int columnCount, UserInfo user) {
+    public static BookshelfFragment newInstance(int columnCount) {
         BookshelfFragment fragment = new BookshelfFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_COLUMN_COUNT, columnCount);
@@ -70,7 +62,6 @@ public class BookshelfFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        user = LocalDataManager.getInstance(getContext()).getUser();
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT, mColumnCount);
         }
@@ -99,6 +90,7 @@ public class BookshelfFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        mUserInfo = LocalDataManager.getInstance(getContext()).getUserInfo();
         mBookList = LocalDataManager.getInstance(getContext()).getBookCollection();
         adapter.notifyDataSetChanged();
         requestBookshelf();
@@ -106,12 +98,12 @@ public class BookshelfFragment extends Fragment {
 
     private void requestBookshelf(){
         retrofit.create(BookshelfApi.class)
-                .request(user.getUid())
+                .request(mUserInfo.getUid())
                 .enqueue(new Callback<List<BookInfo>>() {
                     @Override
                     public void onResponse(Call<List<BookInfo>> call, Response<List<BookInfo>> response) {
                         List<BookInfo> list = response.body();
-                        LocalDataManager.getInstance(getContext()).saveBookCollection(list);
+                        LocalDataManager.getInstance(getContext()).handleBookList(list, true);
                         mBookList = LocalDataManager.getInstance(getContext()).getBookCollection();
                         adapter.notifyDataSetChanged();
                     }
@@ -126,20 +118,10 @@ public class BookshelfFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnItemClickListener) {
-            mListener = (OnItemClickListener) context;
+        if (context instanceof BookRecyclerViewAdapter.OnItemClickListener) {
+            mListener = (BookRecyclerViewAdapter.OnItemClickListener) context;
         }
-        else {
-            mListener = new OnItemClickListener() {
-                @Override
-                public void onItemClick(Book item) {
-                    Intent intent = new Intent(getContext(), CatalogActivity.class);
-                    intent.putExtra("book", item);
-                    startActivity(intent);
-                }
-            };
-        }
-        mActivity = (BooksActivity) getActivity();
+        mActivity = (IndexActivity) getActivity();
     }
 
     @Override
@@ -147,20 +129,5 @@ public class BookshelfFragment extends Fragment {
         super.onDetach();
         mListener = null;
         //mActivity = null;
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnItemClickListener {
-        // TODO: Update argument type and name
-        void onItemClick(Book item);
     }
 }

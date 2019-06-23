@@ -6,6 +6,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.youdu.net.ChapterContentApi;
+import com.example.youdu.util.LocalDataManager;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -14,8 +15,12 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ReadActivity extends AppCompatActivity {
-    Retrofit retrofit;
-    TextView mContentTv;
+    public static final String ARG_CHAPTER_CODE = "chapter-code";
+    public static final String ARG_CONTENT_PATH = "content-path";
+    private Retrofit retrofit;
+    private TextView mContentTv;
+    private int chapterCode;
+    private String contentPath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,8 +31,14 @@ public class ReadActivity extends AppCompatActivity {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         mContentTv = findViewById(R.id.content);
-        int chapterId = getIntent().getIntExtra("chapter-id", 0);
-        String contentPath = getIntent().getStringExtra("content-path");
+        chapterCode = getIntent().getIntExtra(ARG_CHAPTER_CODE, 0);
+        contentPath = getIntent().getStringExtra(ARG_CONTENT_PATH);
+
+        String content = LocalDataManager.getInstance(this).getChapterContent(chapterCode);
+        if (content != null) {
+            mContentTv.setText(content);
+        }
+
         ChapterContentApi service = retrofit.create(ChapterContentApi.class);
         if (contentPath != null) {
             service.requestContentByUrl(contentPath)
@@ -37,7 +48,7 @@ public class ReadActivity extends AppCompatActivity {
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    mContentTv.setText(response.body());
+                                    handleContent(response.body());
                                 }
                             });
                         }
@@ -53,15 +64,15 @@ public class ReadActivity extends AppCompatActivity {
                             });
                         }
                     });
-        } else if (chapterId > 0) {
-            service.requestContentById(chapterId)
+        } else if (chapterCode > 0) {
+            service.requestContentById(chapterCode)
                     .enqueue(new Callback<String>() {
                         @Override
                         public void onResponse(Call<String> call, final Response<String> response) {
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    mContentTv.setText(response.body());
+                                    handleContent(response.body());
                                 }
                             });
                         }
@@ -77,5 +88,10 @@ public class ReadActivity extends AppCompatActivity {
                         }
                     });
         }
+    }
+
+    private void handleContent(String content) {
+        mContentTv.setText(content);
+        LocalDataManager.getInstance(this).saveNovelContent(chapterCode, content);
     }
 }

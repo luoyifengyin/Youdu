@@ -7,100 +7,152 @@
     android:orientation="vertical"
     tools:context=".CatalogActivity">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:orientation="horizontal"
-        android:background="@drawable/catalog1_bg">
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:padding="10dp">
 
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:maxLines="1"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            tools:text="终将成为你 佐伯沙弥香的追忆" />
+
+        <Button
+            android:id="@+id/btn_back"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_centerVertical="true"
+            android:background="@drawable/ic_back" />
+
+    </RelativeLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="260dp"
+        tools:ignore="ContentDescription">
 
         <ImageView
-            android:layout_width="160dp"
-            android:layout_height="match_parent" />
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/catalog1_bg"
+            android:scaleType="centerCrop" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp">
 
-            <TextView
-                android:id=""
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:textStyle="bold"
-                android:textSize="25sp"
-                tools:text="书名"/>
-            <TextView
-                android:id=""
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:textStyle="bold"
-                android:textSize="25sp"
-                tools:text="类型"/>
-            <TextView
-                android:id=""
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:textStyle="bold"
-                android:textSize="25sp"
-                tools:text="订阅量"/>
-            <TextView
-                android:id=""
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:textStyle="bold"
-                android:textSize="25sp"
-                tools:text="最新更新时间"/>
+            <ImageView
+                android:id="@+id/cover"
+                android:layout_width="140dp"
+                android:layout_height="196dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginRight="15dp" />
+
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:orientation="horizontal">
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-                <Button
-                    android:id=""
+                <TextView
+                    android:id="@+id/tv_author"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="25sp"
+                    tools:text="作者" />
 
-                    android:layout_width="100dp"
+                <TextView
+                    android:id="@+id/tv_class"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/activity_horizontal_margin"
-                    android:layout_marginEnd="@dimen/activity_horizontal_margin"
-                    android:background="#BA33337A"
-                    android:text="取消订阅"
-                    android:textStyle="bold" />
-                <Button
-                    android:id=""
-                    android:layout_width="100dp"
+                    android:textSize="25sp"
+                    tools:text="类型" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/tv_collection_cnt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="25sp"
+                        tools:text="订阅量" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tv_last_update_time"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/activity_horizontal_margin"
-                    android:layout_marginEnd="@dimen/activity_horizontal_margin"
-                    android:background="#BA33337A"
-                    android:text="继续阅读"
-                    android:textStyle="bold" />
+                    android:textSize="25sp"
+                    tools:text="最近更新时间" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    style="?android:attr/buttonBarStyle">
+
+                    <Button
+                        android:id="@+id/btn_collect"
+                        style="?android:attr/buttonBarButtonStyle"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/btn_collect"
+                        android:textStyle="bold"
+                        android:textColor="#fff"
+                        tools:text="订阅" />
+
+                    <Button
+                        android:id="@+id/btn_read"
+                        style="?android:attr/buttonBarButtonStyle"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/activity_horizontal_margin"
+                        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                        android:background="@drawable/btn_read"
+                        android:textStyle="bold"
+                        tools:text="开始阅读" />
+
+                </LinearLayout>
 
             </LinearLayout>
 
         </LinearLayout>
 
+    </FrameLayout>
 
-    </LinearLayout>
-
-    <LinearLayout
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/tv_introduction"
         android:layout_width="match_parent"
-        android:layout_height="80dp">
+        android:layout_height="wrap_content"
+        android:maxLines="@integer/book_introduction_lines"
+        android:padding="10dp"
+        android:textSize="16sp"
+        android:ellipsize="end"
+        tools:text="简介：" />
 
-        <TextView
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/catalog"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:textStyle="bold"
-            android:textSize="25sp"
-            tools:text="  简介："/>
-    </LinearLayout>
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-    <android.support.v7.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_weight="1">
+        </LinearLayout>
 
-    </android.support.v7.widget.RecyclerView>
+    </ScrollView>
 
 </LinearLayout>

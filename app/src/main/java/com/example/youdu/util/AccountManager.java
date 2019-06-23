@@ -72,9 +72,9 @@ public class AccountManager {
                             switch (code){
                                 case 0:
                                     result = LOGIN_SUCCESS;
-                                    UserInfo user = new Gson().fromJson(obj.getJSONObject("user").toString(), UserInfo.class);
-                                    user.setPasswordMd5(passwordMd5);
-                                    callback.onSuccess(user);
+                                    UserInfo userInfo = new Gson().fromJson(obj.getJSONObject("user").toString(), UserInfo.class);
+                                    userInfo.setPasswordMd5(passwordMd5);
+                                    callback.onSuccess(userInfo);
                                     return;
                                 case 1:
                                     result = USERNAME_NOT_EXIST;

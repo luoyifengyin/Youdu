@@ -13,7 +13,7 @@ public class BookInfo {
     @SerializedName("author_id")
     public int authorId;
 
-    @Expose(serialize = false, deserialize = false)
+    @SerializedName("author_name")
     public String authorName;
 
     @SerializedName("cover")

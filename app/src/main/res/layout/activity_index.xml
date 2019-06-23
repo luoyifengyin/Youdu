@@ -4,9 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#529C27B0"
     android:orientation="vertical"
-    tools:context=".BooksActivity">
+    tools:context=".IndexActivity">
 
     <android.support.v4.app.FragmentTabHost
         android:id="@android:id/tabhost"
@@ -29,6 +28,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:layout_gravity="bottom" />
+
         </LinearLayout>
 
     </android.support.v4.app.FragmentTabHost>

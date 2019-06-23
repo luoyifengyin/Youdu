@@ -1,39 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".ModifyActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp">
-
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:padding="10dp">
 
         <TextView
+            android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="修改密码"
-            android:textStyle="bold"
-            android:textSize="80px"
-            android:layout_centerInParent="true"/>
+            android:layout_centerInParent="true"
+            android:text="@string/modify_profile"
+            android:maxLines="1"
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
         <Button
-            android:id=""
-            android:layout_width="50dp"
-            android:layout_height="match_parent"
-            android:background="@drawable/ic_back"/>
+            android:id="@+id/btn_back"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_centerVertical="true"
+            android:background="@drawable/ic_back" />
 
     </RelativeLayout>
 
     <LinearLayout
-        android:id=""
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginLeft="@dimen/activity_horizontal_margin"
         android:layout_marginRight="@dimen/activity_horizontal_margin"
         android:layout_marginBottom="@dimen/activity_vertical_margin"
-        android:fitsSystemWindows="true"
         android:gravity="center_vertical"
         android:orientation="vertical">
 
@@ -41,13 +45,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-
             <EditText
-                android:id=""
+                android:id="@+id/et_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="旧密码"
-                android:inputType="textEmailAddress"
+                android:hint="@string/user_name"
+                android:inputType="text"
                 android:maxLines="1"
                 android:singleLine="true" />
 
@@ -58,7 +61,23 @@
             android:layout_height="wrap_content">
 
             <EditText
-                android:id=""
+                android:id="@+id/et_old_pwd"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="旧密码"
+                android:imeOptions="actionUnspecified"
+                android:inputType="textPassword"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/et_new_pwd"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="新密码"
@@ -74,7 +93,7 @@
             android:layout_height="wrap_content">
 
             <EditText
-                android:id=""
+                android:id="@+id/et_new_pwd_confirm"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="确认密码"
@@ -93,26 +112,14 @@
             android:orientation="vertical">
 
             <Button
-                android:id=""
+                android:id="@+id/btn_submit"
                 style="?android:textAppearanceSmall"
                 android:layout_width="233dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/activity_horizontal_margin"
                 android:layout_marginEnd="@dimen/activity_horizontal_margin"
                 android:background="#5676777A"
-                android:text="确认修改"
-                android:textStyle="bold" />
-
-            <Button
-                android:id=""
-                style="?android:textAppearanceSmall"
-                android:layout_width="233dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_marginStart="@dimen/activity_horizontal_margin"
-                android:layout_marginEnd="@dimen/activity_horizontal_margin"
-                android:background="#5676777A"
-                android:text="取消"
+                android:text="@string/confirm_modify"
                 android:textStyle="bold" />
 
         </LinearLayout>

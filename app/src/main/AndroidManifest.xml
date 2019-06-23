@@ -12,9 +12,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".ReadActivity"></activity>
+        <activity android:name=".SubmissionActivity" />
+        <activity android:name=".ModifyActivity" />
+        <activity android:name=".ReadActivity" />
         <activity android:name=".CatalogActivity" />
-        <activity android:name=".BooksActivity" />
+        <activity android:name=".IndexActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -24,7 +24,7 @@ public class LocalDataManager {
     private static LocalDataManager localDataManager;
     private Context context;
     private SharedPreferences prefs;
-    private UserInfo user;
+    private UserInfo userInfo;
     private List<Book> bookCollection;
 
     private LocalDataManager(Context context) {
@@ -43,41 +43,39 @@ public class LocalDataManager {
         return localDataManager;
     }
 
-    public UserInfo getUser() {
-        if (user == null && prefs.getInt(UID, -1) >= 0) {
-            user = new UserInfo();
-            user.setUid(prefs.getInt(UID, -1));
-            user.setPasswordMd5(prefs.getString(PASSWORD_MD5, null));
-            user.setName(prefs.getString(USER_NAME, null));
-            user.setAvatarPath(prefs.getString(AVATAR_URL, null));
+    public UserInfo getUserInfo() {
+        if (userInfo == null && prefs.getInt(UID, -1) >= 0) {
+            userInfo = new UserInfo();
+            userInfo.setUid(prefs.getInt(UID, -1));
+            userInfo.setPasswordMd5(prefs.getString(PASSWORD_MD5, null));
+            userInfo.setName(prefs.getString(USER_NAME, null));
+            userInfo.setAvatarPath(prefs.getString(AVATAR_URL, null));
         }
-        return user;
+        return userInfo;
     }
 
-    public void saveUser(UserInfo user) {
+    public void saveUser(UserInfo userInfo) {
         SharedPreferences.Editor editor = prefs.edit();
-        editor.putInt(UID, user.getUid());
-        editor.putString(PASSWORD_MD5, user.getPasswordMd5());
-        editor.putString(USER_NAME, user.getName());
-        editor.putString(AVATAR_URL, user.getAvatarPath());
+        editor.putInt(UID, userInfo.getUid());
+        editor.putString(PASSWORD_MD5, userInfo.getPasswordMd5());
+        editor.putString(USER_NAME, userInfo.getName());
+        editor.putString(AVATAR_URL, userInfo.getAvatarPath());
         editor.apply();
-        this.user = user;
+        this.userInfo = userInfo;
     }
 
     public List<Book> getBookCollection() {
         if (bookCollection == null) {
-            bookCollection = LitePal.where("userId = ?", "" + getUser().getUid())
+            bookCollection = LitePal.where("userId = ?", "" + getUserInfo().getUid())
                     .order("lastTime desc").find(Book.class);
         }
         return bookCollection;
     }
 
-    private Book saveBook(BookInfo bookInfo) {
-        boolean flag = false;
+    private Book handleBook(BookInfo bookInfo, boolean isCollection) {
         Book book = LitePal.where("code = ?", "" + bookInfo.id).findFirst(Book.class);
         if (book == null) {
             book = new Book();
-            flag = true;
         }
         book.setCode(bookInfo.id);
         book.setTitle(bookInfo.tile);
@@ -87,17 +85,19 @@ public class LocalDataManager {
         book.setPublishTime(bookInfo.publishTime);
         book.setReadingChapterId(bookInfo.readingChapterId);
         book.setLastTime(bookInfo.lastTime);
-        book.setUserId(LocalDataManager.getInstance(context).getUser().getUid());
-        book.save();
-        if (flag) return book;
-        else return null;
+        book.setUserId(LocalDataManager.getInstance(context).getUserInfo().getUid());
+        if (isCollection) book.save();
+        return book;
     }
 
-    public void saveBookCollection(List<BookInfo> books) {
+    public List<Book> handleBookList(List<BookInfo> books, boolean isCollection) {
+        List<Book> list = new ArrayList<>();
         for (BookInfo bookInfo : books) {
-            saveBook(bookInfo);
+            Book book = handleBook(bookInfo, isCollection);
+            list.add(book);
         }
-        bookCollection = getBookCollection();
+        if (isCollection) bookCollection = getBookCollection();
+        return list;
     }
 
     public void addBook(Book book) {
@@ -108,11 +108,20 @@ public class LocalDataManager {
 
     public void removeBook(Book book) {
         bookCollection.remove(book);
-        LitePal.delete(Book.class, book.getId());
+        if (book.isSaved()) {
+            book.delete();
+        }
     }
 
     public List<Volume> getCatalog(Book book) {
-        return LitePal.where("book_id = ?", "" + book.getId()).find(Volume.class, true);
+        List<Volume> volumes = LitePal.where("book_id = ?", "" + book.getId())
+                .order("number").find(Volume.class);
+        for (Volume volume : volumes) {
+            List<Chapter> chapters = LitePal.where("volume_id = ?", "" + volume.getId())
+                    .order("number").find(Chapter.class);
+            volume.setChapters(chapters);
+        }
+        return volumes;
     }
 
     private Chapter handleChapter(Volume volume, VolumeInfo.ChapterInfo chapterInfo, boolean shouldSave) {
@@ -148,11 +157,25 @@ public class LocalDataManager {
         return volume;
     }
 
-    public void handleCatalog(Book book, List<VolumeInfo> catalog, boolean shouldSave) {
+    public void handleCatalog(Book book, List<VolumeInfo> catalog) {
+        boolean shouldSave = bookCollection.contains(book);
         List<Volume> volumes = new ArrayList<>();
         for (VolumeInfo volumeInfo : catalog) {
             volumes.add(handleVolume(book, volumeInfo, shouldSave));
         }
         book.setVolumes(volumes);
+    }
+
+    public String getChapterContent(int chapterCode) {
+        if (chapterCode == 0) return null;
+        Chapter chapter = LitePal.where("code = ?", "" + chapterCode).findFirst(Chapter.class);
+        return chapter.getContent();
+    }
+
+    public boolean saveNovelContent(int chapterCode, String content) {
+        Chapter chapter = LitePal.where("code = ?", "" + chapterCode).findFirst(Chapter.class);
+        if (chapter == null) return false;
+        chapter.setContent(content);
+        return true;
     }
 }

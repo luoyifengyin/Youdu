@@ -38,13 +38,18 @@ public class MainActivity extends AppCompatActivity {
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String userName = accountText.getText().toString();
-                String password = passwordText.getText().toString();
-                AccountManager.login(userName, password, new MyCallback<UserInfo>() {
+                String username = accountText.getText().toString().trim();
+                final String password = passwordText.getText().toString();
+                if (username.isEmpty()) {
+                    accountText.setError("请输入用户名");
+                    accountText.requestFocus();
+                    return;
+                }
+                AccountManager.login(username, password, new MyCallback<UserInfo>() {
                     @Override
-                    public void onSuccess(UserInfo user) {
-                        LocalDataManager.getInstance(MainActivity.this).saveUser(user);
-                        Intent intent = new Intent(MainActivity.this, BooksActivity.class);
+                    public void onSuccess(UserInfo userInfo) {
+                        LocalDataManager.getInstance(MainActivity.this).saveUser(userInfo);
+                        Intent intent = new Intent(MainActivity.this, IndexActivity.class);
                         startActivity(intent);
                         finish();
                     }
@@ -53,11 +58,11 @@ public class MainActivity extends AppCompatActivity {
                     public void onFailure(int code) {
                         switch (code){
                             case AccountManager.PASSWORD_WRONG:
-                                Toast.makeText(MainActivity.this, R.string.password_error, Toast.LENGTH_SHORT).show();
+                                passwordText.setError("密码错误，请重新输入");
                                 passwordText.requestFocus();
                                 break;
                             case AccountManager.USERNAME_NOT_EXIST:
-                                Toast.makeText(MainActivity.this, R.string.username_not_exist, Toast.LENGTH_SHORT).show();
+                                accountText.setError("用户名不存在，请重新输入");
                                 accountText.requestFocus();
                                 break;
                             default:
@@ -72,23 +77,28 @@ public class MainActivity extends AppCompatActivity {
         registerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String username = accountText.getText().toString();
+                String username = accountText.getText().toString().trim();
                 String password = passwordText.getText().toString();
+                if (username.isEmpty()) {
+                    accountText.setError("请输入用户名");
+                    accountText.requestFocus();
+                    return;
+                }
                 AccountManager.register(username, password, new MyCallback() {
                     @Override
                     public void onSuccess(Object o) {
-                        Toast.makeText(MainActivity.this, R.string.register_success, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, "注册成功", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
                     public void onFailure(int code) {
                         switch (code) {
                             case AccountManager.USERNAME_EXIST:
-                                Toast.makeText(MainActivity.this, R.string.username_exist, Toast.LENGTH_LONG).show();
+                                accountText.setError("注册失败，用户名已存在");
                                 accountText.requestFocus();
                                 break;
                             case AccountManager.PASSWORD_TOOSHORT:
-                                Toast.makeText(MainActivity.this, R.string.password_too_short, Toast.LENGTH_SHORT).show();
+                                passwordText.setError("密码长度必须大于等于6位");
                                 passwordText.requestFocus();
                                 break;
                             default:

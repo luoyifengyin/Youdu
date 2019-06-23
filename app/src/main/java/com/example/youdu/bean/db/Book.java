@@ -1,6 +1,5 @@
 package com.example.youdu.bean.db;
 
-import org.litepal.annotation.Column;
 import org.litepal.crud.LitePalSupport;
 
 import java.io.Serializable;
@@ -11,7 +10,6 @@ public class Book extends LitePalSupport implements Serializable {
     private int id;
     private int code;
     private String title;
-    @Column(ignore = true)
     private int authorId;
     private String authorName;
     private String introduction;

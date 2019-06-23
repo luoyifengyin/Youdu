@@ -1,6 +1,7 @@
 package com.example.youdu.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,7 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.example.youdu.BookshelfFragment.OnItemClickListener;
+import com.example.youdu.CatalogActivity;
 import com.example.youdu.MainActivity;
 import com.example.youdu.R;
 import com.example.youdu.bean.BookInfo;
@@ -31,7 +32,18 @@ public class BookRecyclerViewAdapter extends RecyclerView.Adapter<BookRecyclerVi
     public BookRecyclerViewAdapter(Context context, List<Book> items, OnItemClickListener listener) {
         mContext = context;
         mValues = items;
-        mListener = listener;
+        if (listener != null) {
+            mListener = listener;
+        } else {
+            mListener = new OnItemClickListener() {
+                @Override
+                public void onItemClick(Book book) {
+                    Intent intent = new Intent(mContext, CatalogActivity.class);
+                    intent.putExtra("book", book);
+                    mContext.startActivity(intent);
+                }
+            };
+        }
     }
 
     @Override
@@ -44,9 +56,19 @@ public class BookRecyclerViewAdapter extends RecyclerView.Adapter<BookRecyclerVi
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        Glide.with(mContext).load(MainActivity.URL + mValues.get(position).getCoverPath()).into(holder.mCover);
+        if (mValues.get(position).getCoverPath() != null) {
+            Glide.with(mContext).load(MainActivity.URL + mValues.get(position).getCoverPath()).into(holder.mCover);
+        }
         holder.mTitleText.setText(mValues.get(position).getTitle());
         holder.mAuthorText.setVisibility(View.GONE);
+        if (mValues.get(position).getCode() < 0) {
+            holder.mCover.setBackgroundResource(R.drawable.layer_add_book);
+            holder.mCover.setPadding(mContext.getResources().getDimensionPixelSize(R.dimen.ic_add_book_plus),
+                    mContext.getResources().getDimensionPixelSize(R.dimen.ic_add_book_plus),
+                    mContext.getResources().getDimensionPixelSize(R.dimen.ic_add_book_plus),
+                    mContext.getResources().getDimensionPixelSize(R.dimen.ic_add_book_plus));
+            holder.mCover.setImageResource(R.drawable.plus);
+        }
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,5 +106,9 @@ public class BookRecyclerViewAdapter extends RecyclerView.Adapter<BookRecyclerVi
         public String toString() {
             return super.toString() + " '" + mTitleText.getText() + "'";
         }
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(Book book);
     }
 }
